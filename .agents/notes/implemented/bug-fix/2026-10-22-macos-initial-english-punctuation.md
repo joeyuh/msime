@@ -25,7 +25,8 @@ Status: implemented
 - `cmake --build target/macos-isolated --target MSIMEClientInputMethod --parallel 6`：arm64 原生拼音 bundle 构建通过。
 - 完整 `shortcut` 测试在修复前即因候选窗边框颜色断言失败；独立标点入口避免该基线问题掩盖本回归。
 - 关联的标点空格、标点影子状态、成对标点、局部模式偏好、外观默认值及标点专项共六项 CTest 全部通过。
-- `scripts/verify-local.sh --quick` 的 Rust workspace、macOS 全量构建和共享 Apple bridge 编译通过。门禁未整体通过：默认 Python 过旧引发的八项契约失败均已用 Python 3.12 单独重跑通过；Android host Java 检查因本机缺 Android API 35 失败，不在本补丁内安装 Android 环境。
+- 补齐 Android API 35 和 Build Tools 35.0.0 后，以 Python 3.12、Node 24、`TZ=UTC`、构建并发 6 重跑 `bash scripts/verify-local.sh --quick`，退出码 0，报告 `quick check passed`；Rust workspace、macOS 构建、Android host Java、契约检查和共享 Apple bridge 均通过。缺少 NDK、MinGW、Docker、HarmonyOS 等环境的阶段按脚本规则跳过。
+- 默认本机时区下 Android 的 `TimestampDisplayPolicySmoke` 在极端时间戳断言失败；从补丁前提交 `5a622be` 单独取出同一测试和实现可复现，设置 `TZ=UTC` 后通过。本补丁不修改该测试、实现或系统时区。
 - macOS 27.0.1 / Apple Silicon 上以本地 ad-hoc 签名安装原生拼音试用包，用户在 Calendar 中确认默认英文直接输出半角标点，随后确认正常使用、修复有效。该验证针对原生输入法，不是完整发布安装包。
 
 ## Consequences
