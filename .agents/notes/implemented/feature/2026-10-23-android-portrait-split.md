@@ -32,6 +32,8 @@ Status: implemented
 
 ## Testing
 
+- `touch_keyboard_split_portrait` 在 macOS 的偏好覆盖清单中明确标为不适用，理由是 macOS 屏幕键盘不采用分离布局，设置页不提供此项。新增字段后 CI 的 `preference-coverage` 检出这项遗漏；补齐后脚本及同名 CTest 均通过。编译型 quick 本身不运行这项 CTest。
+
 - 共享偏好回归先在没有新字段的实现上失败（缺省值读到 `Null`），加入字段后 `cargo test -p msime-client-core --locked --lib` 的 506 项全部通过；覆盖旧文档缺字段默认为关、布尔往返和字符串、数字、空值拒绝。
 - `cargo clippy -p msime-client-core --locked --all-targets -- -D warnings` 通过。首次被既有 Vim 两项测试的 Default 后赋值挡住，移除本次新偏好仍复现；同文件中机械改成结构体初始化，断言不变。
 - `bash platforms/android/check-host.sh` 的 256 项 JVM 冒烟和 JNI/Java 契约通过；`SplitKeyboardPolicySmoke` 覆盖主开关、方向覆盖、599/600 dp 边界及布局排除。
